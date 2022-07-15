@@ -167,17 +167,6 @@ func LoadFormatGoFile(file io.FileObj, cfg config.Config) (src, dist []byte, err
 		}
 	}
 
-	if len(result["default"]) > 0 {
-		for _, d := range result["default"] {
-			AddIndent(&body, &firstWithIndex)
-			body = append(body, src[d.Start:d.End]...)
-		}
-
-		if len(customKeys) > 0 {
-			body = append(body, utils.Linebreak)
-		}
-	}
-
 	if len(customKeys) > 0 {
 		sort.Sort(sort.StringSlice(customKeys))
 		for i, k := range customKeys {
@@ -188,6 +177,17 @@ func LoadFormatGoFile(file io.FileObj, cfg config.Config) (src, dist []byte, err
 			if i+1 < len(customKeys) {
 				body = append(body, utils.Linebreak)
 			}
+
+			if len(result["default"]) > 0 {
+				body = append(body, utils.Linebreak)
+			}
+		}
+	}
+
+	if len(result["default"]) > 0 {
+		for _, d := range result["default"] {
+			AddIndent(&body, &firstWithIndex)
+			body = append(body, src[d.Start:d.End]...)
 		}
 	}
 
